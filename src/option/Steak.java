@@ -15,7 +15,7 @@ public class Steak extends Food {
         } else if (styleChoice == 2) {
             this.steakStyle = "통스테이크";
         } else {
-            this.steakStyle = "기본 통스테이크"; // 1, 2 이외의 숫자가 들어왔을 때의 방어벽
+            this.steakStyle = "기본 통스테이크";
         }
 
         if (donenessChoice == 1) {
@@ -29,7 +29,7 @@ public class Steak extends Food {
         } else if (donenessChoice == 5) {
             this.steakDoneness = "웰던";
         } else {
-            this.steakDoneness = "기본굽기(미디움)"; // 범위 밖의 숫자가 들어왔을 때의 방어벽
+            this.steakDoneness = "기본굽기(미디움)";
         }
     }
 
