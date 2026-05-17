@@ -25,8 +25,11 @@ public class Pasta extends Food {
         } else if (noodleChoice == 2){
             this.noodleDoneness = "보통 (단테)";
         } else if (noodleChoice == 3){
-            this.noodleDoneness = "부드렵 (벤코토)";
+            this.noodleDoneness = "부드렵게 (벤코토)";
+        } else {
+            this.noodleDoneness = "기본 익힘(보통)"; // 1,2,3 외의 값이 들어올 때를 대비한 else
         }
+
     }
     @Override
     public void cook(){

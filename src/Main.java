@@ -7,7 +7,7 @@ import restaurant.Food;
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
-    Food selectedFood = null; // 손님이 최종 선택한 음식을 담을 다형성 변수
+    Food selectedFood = null;
 
     // 가게 메뉴판 등록 (List 활용(추후 더 이해하기))
     List<Food> pastaMenu = new ArrayList<>();
@@ -19,9 +19,9 @@ public class Main {
     steakMenu.add(new PorkSteak(0, 0));
     steakMenu.add(new BeefSteak(0, 0));
 
-    //카테고리 메뉴 선택 (반복 장착)
+    //카테고리 메뉴
     int category = 0;
-    List<Food> chosenList = null; // 손님이 누른 카테고리의 리스트를 가리킬 포인터
+    List<Food> chosenList = null;
 
     //예외수 일때 반복하기위해서 사용함
     while (true) {
@@ -52,7 +52,7 @@ public class Main {
       menuChoice = sc.nextInt();
 
       if (menuChoice >= 1 && menuChoice <= chosenList.size()) {
-        break; // 올바른 방 번호이므로 메뉴 선택 반복문 탈출
+        break;
       }
       System.out.println("존재하지 않는 메뉴 번호입니다. 다시 골라주세요.\n");
     }
