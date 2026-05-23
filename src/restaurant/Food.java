@@ -1,8 +1,8 @@
 package restaurant;
 
 public class Food {
-    String foodName;
-    int price;
+    private final String foodName;
+    private final int price;
 
     public Food(String foodName, int price){
         this.foodName = foodName;

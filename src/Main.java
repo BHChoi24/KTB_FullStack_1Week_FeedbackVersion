@@ -1,13 +1,15 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import menu.*;
 import restaurant.Food;
+import view.OutputView;
 
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     Food selectedFood = null;
+
+    //OutView
+    OutputView outputView = new OutputView();
 
     // 가게 메뉴판 등록 (List 활용(추후 더 이해하기))
     List<Food> pastaMenu = new ArrayList<>();
@@ -24,12 +26,18 @@ public class Main {
     List<Food> chosenList = null;
 
     //예외수 일때 반복하기위해서 사용함
+    //1. 카테고리 선택
     while (true) {
-      System.out.println("=== 레스토랑 키오스크 시스템 ===");
-      System.out.println("1. 파스타 라인업");
-      System.out.println("2. 스테이크 라인업");
-      System.out.print("원하시는 카테고리 번호를 누르세요: ");
-      category = sc.nextInt();
+      outputView.categoryMenu();
+
+      try {
+        category = sc.nextInt();
+      } catch (InputMismatchException e){ //숫자 이외의 값 잡기
+        outputView.reInput();
+        sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
+        category = -1; // 찾아보니 해당인텓스가 없을때 -1을 개발자에게 의도를 드러내는 뜻(에러상태임을 전달)
+        continue;
+      }
 
       if (category == 1) {
         System.out.println("\n--- 파스타 메뉴 선택 ---");
@@ -43,64 +51,94 @@ public class Main {
       System.out.println("잘못된 카테고리 번호입니다. 다시 선택해주세요.\n");
     }
 
+    //2. 카테고리에서 고른 옵션으로 넘어가 음식 종류 선택
     int menuChoice = 0;
     while (true) {
       for (int i = 0; i < chosenList.size(); i++) {
         System.out.println((i + 1) + ". " + chosenList.get(i).getFoodName() + " (" + chosenList.get(i).getPrice() + "원)");
       }
       System.out.print("메뉴 번호를 고르세요: ");
-      menuChoice = sc.nextInt();
+
+
+      try {
+        menuChoice = sc.nextInt();
+      } catch (InputMismatchException e){ //숫자 이외의 값 잡기
+        sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
+        menuChoice = -1;
+        continue;
+      }
 
       if (menuChoice >= 1 && menuChoice <= chosenList.size()) {
         break;
       }
-      System.out.println("존재하지 않는 메뉴 번호입니다. 다시 골라주세요.\n");
+      outputView.reInput();
     }
 
     Food baseFood = chosenList.get(menuChoice - 1);
     int option1 = 0;
     int option2 = 0;
 
+    //2-1. 파스타 옵션
     if (category == 1) {
       while (true) {
-        System.out.println("\n--- [옵션 1] 면 종류 선택 ---");
-        System.out.println("1. 스파게티 면 | 2. 링귀니 면 | 3. 부카티니 면");
-        System.out.print("번호 입력: ");
-        option1 = sc.nextInt();
+        outputView.pastaOption1();
 
+        try {
+          option1 = sc.nextInt();
+        } catch (InputMismatchException e){
+          sc.nextLine();
+          option1 = -1;
+          continue;
+        }
         if (option1 >= 1 && option1 <= 3) break;
-        System.out.println("없는 선택지입니다. 1~3번 사이로 다시 입력하세요.");
+        outputView.reInput();
       }
 
       while (true) {
-        System.out.println("\n--- [옵션 2] 면 익힘 정도 선택 ---");
-        System.out.println("1. 단단하게 | 2. 보통 | 3. 부드럽게");
-        System.out.print("번호 입력: ");
-        option2 = sc.nextInt();
+        outputView.pastaOption2();
+
+        try {
+          option2 = sc.nextInt();
+        } catch (InputMismatchException e){ //숫자 이외의 값 잡기
+          sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
+          option1 = -1;
+          continue;
+        }
 
         if (option2 >= 1 && option2 <= 3) break;
-        System.out.println("없는 선택지입니다. 1~3번 사이로 다시 입력하세요.");
+        outputView.reInput();
       }
 
+      //2-2. 스테이크 옵션
     } else if (category == 2) {
       while (true) {
-        System.out.println("\n--- [옵션 1] 스테이크 스타일 선택 ---");
-        System.out.println("1. 챱스테이크 | 2. 통스테이크");
-        System.out.print("번호 입력: ");
-        option1 = sc.nextInt();
+        outputView.steakOption1();
+
+        try {
+          option1 = sc.nextInt();
+        } catch (InputMismatchException e){ //숫자 이외의 값 잡기
+          sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
+          option1 = -1;
+          continue;
+        }
 
         if (option1 >= 1 && option1 <= 2) break;
-        System.out.println("없는 선택지입니다. 1~2번 사이로 다시 입력하세요.");
+        outputView.reInput();
       }
 
       while (true) {
-        System.out.println("\n--- [옵션 2] 고기 굽기 정도 선택 ---");
-        System.out.println("1. 레어 | 2. 미디움 레어 | 3. 미디움 | 4. 미디움 웰던 | 5. 웰던");
-        System.out.print("번호 입력: ");
-        option2 = sc.nextInt();
+        outputView.steakOption2();
+
+        try {
+          option2 = sc.nextInt();
+        } catch (InputMismatchException e){ //숫자 이외의 값 잡기
+          sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
+          option1 = -1;
+          continue;
+        }
 
         if (option2 >= 1 && option2 <= 5) break;
-        System.out.println("없는 선택지입니다. 1~5번 사이로 다시 입력하세요.");
+        outputView.reInput();
       }
     }
 
@@ -111,7 +149,7 @@ public class Main {
     else if (baseFood instanceof PorkSteak) selectedFood = new PorkSteak(option1, option2);
     else if (baseFood instanceof BeefSteak) selectedFood = new BeefSteak(option1, option2);
 
-    // 최종 주문 확인
+    // 3. 최종 주문 확인
     if (selectedFood != null) {
       System.out.println("\n====================================");
       System.out.println("[주문서 출력] 선택하신 메뉴 정보");

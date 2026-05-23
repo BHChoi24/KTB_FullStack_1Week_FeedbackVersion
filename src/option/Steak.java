@@ -36,7 +36,6 @@ public class Steak extends Food {
     @Override
     public void cook() {
         super.cook();
-
         // 손님이 옵션 출력
         System.out.println("[옵션] 스타일: " + steakStyle + " | 굽기정도 : " + steakDoneness);
     }
