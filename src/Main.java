@@ -1,6 +1,7 @@
 import java.util.*;
 import menu.*;
 import restaurant.Food;
+import view.InputView;
 import view.OutputView;
 
 public class Main {
@@ -8,8 +9,9 @@ public class Main {
     Scanner sc = new Scanner(System.in);
     Food selectedFood = null;
 
-    //OutView
     OutputView outputView = new OutputView();
+    InputView inputView = new InputView();
+
 
     // 가게 메뉴판 등록 (List 활용(추후 더 이해하기))
     List<Food> pastaMenu = new ArrayList<>();
@@ -21,6 +23,8 @@ public class Main {
     steakMenu.add(new PorkSteak(0, 0));
     steakMenu.add(new BeefSteak(0, 0));
 
+
+
     //카테고리 메뉴
     int category = 0;
     List<Food> chosenList = null;
@@ -30,14 +34,7 @@ public class Main {
     while (true) {
       outputView.categoryMenu();
 
-      try {
-        category = sc.nextInt();
-      } catch (InputMismatchException e){ //숫자 이외의 값 잡기
-        outputView.reInput();
-        sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-        category = -1; // 찾아보니 해당인텓스가 없을때 -1을 개발자에게 의도를 드러내는 뜻(에러상태임을 전달)
-        continue;
-      }
+      category = inputView.readCategoryNumber();
 
       if (category == 1) {
         System.out.println("\n--- 파스타 메뉴 선택 ---");
@@ -48,7 +45,7 @@ public class Main {
         chosenList = steakMenu;
         break;
       }
-      System.out.println("잘못된 카테고리 번호입니다. 다시 선택해주세요.\n");
+      outputView.reInput();
     }
 
     //2. 카테고리에서 고른 옵션으로 넘어가 음식 종류 선택
@@ -101,7 +98,7 @@ public class Main {
           option2 = sc.nextInt();
         } catch (InputMismatchException e){ //숫자 이외의 값 잡기
           sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-          option1 = -1;
+          option2 = -1;
           continue;
         }
 
@@ -133,7 +130,7 @@ public class Main {
           option2 = sc.nextInt();
         } catch (InputMismatchException e){ //숫자 이외의 값 잡기
           sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-          option1 = -1;
+          option2 = -1;
           continue;
         }
 

@@ -31,9 +31,7 @@ public class OutputView {
         System.out.print("번호 입력: ");
     }
 
-
-
     public void reInput(){
-        System.out.println("\n다시 입력해주세요\n");
+        System.out.println("\n잘못된 값입니다. 다시 입력해주세요\n");
     }
 }
