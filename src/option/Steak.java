@@ -7,12 +7,14 @@ public class Steak extends Food {
     public static final String[] STEAK_STYLES = {"챱스테이크", "통스테이크"};
     public static final String[] STEAK_DONENESS = {"레어", "미디움 레어", "미디움", "미디움 웰던", "웰던"};
 
-    String steakStyle;
-    String steakDoneness; // 굽기 정도
+    private final String steakStyle;
+    private final String steakDoneness; // 굽기 정도
 
     //메뉴판용
     public Steak(String foodName, int price) {
         super(foodName, price);
+        this.steakStyle = "선택 안함";
+        this.steakDoneness = "선택 안함";
     }
 
     public Steak(String foodName, int price, int styleChoice, int donenessChoice) {
@@ -34,6 +36,8 @@ public class Steak extends Food {
     @Override
     public void cook() {
         super.cook();
-        System.out.println("[옵션] 스타일: " + steakStyle + " | 굽기정도 : " + steakDoneness);
+        if (!steakStyle.equals("선택 안함")) {
+            System.out.println("[옵션] 스타일: " + steakStyle + " | 굽기정도 : " + steakDoneness);
+        }
     }
 }

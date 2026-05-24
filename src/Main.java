@@ -14,22 +14,26 @@ public class Main {
     Validator validator = new Validator();
     OrderService orderService = new OrderService();
 
-    int category = 0;
+    MenuCategory category = MenuCategory.NONE;
     List<Food> chosenList = null;
 
     //1. 카테고리 선택
     while (true) {
       outputView.categoryMenu(); // 카테고리 메뉴 출력
-      category = inputView.readCategoryNumber(); // 카테고리 번호 입력
+      int inputNum = inputView.readCategoryNumber();// 카테고리 번호 입력
       // 입력 에러(-1)가 감지되면 루프 상단으로 복귀
-      if (category == -1) {
+      if (inputNum == -1) {
         outputView.reInput(); // 다시입력 출력
         continue;
       }
+
+      //정수를 Enum 객체로 즉시 치환 변환 수행
+      category = MenuCategory.fromNumber(inputNum);
       // 입력값이 1, 2인지 판단을 Validator확인
       if (validator.isValidCategory(category)) {
-        //해당하는 메뉴판 목록을 조회해옴
         chosenList = menuRepository.getMenusByCategory(category);
+        // Enum 객체가 내포한 타이틀 데이터를 직접 꺼내어 출력 (Main의 문자열 제거)
+        System.out.println("\n" + category.getTitle());
         break;
       }
       outputView.reInput();
@@ -49,7 +53,7 @@ public class Main {
         continue;
       }
       //숫자 범위 검사 (고른 숫자가 1이상, 메뉴크기 이하)
-      if (menuChoice >= 1 && menuChoice <= chosenList.size()) {
+      if (validator.isValidChoice(menuChoice, chosenList.size())) {
         break;
       }
       outputView.reInput();
@@ -61,7 +65,7 @@ public class Main {
 
     //3. 옵션 부분
     //3-1. 파스타 옵션의 음식
-    if (category == 1) {
+    if (category == MenuCategory.PASTA) {
       while (true) {
         int maxRange = outputView.pastaOption1();//파스파 옵션보여주고 맥스값 넣기
         option1 = inputView.readOptionNumber();
@@ -88,7 +92,7 @@ public class Main {
       }
 
       // 3-2. 스테이크 옵션 선택 영역
-    } else if (category == 2) {
+    } else if (category == MenuCategory.STEAK) {
       while (true) {
         int maxRange = outputView.steakOption1();
         option1 = inputView.readOptionNumber();
