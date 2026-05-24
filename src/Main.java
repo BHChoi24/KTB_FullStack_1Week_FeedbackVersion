@@ -1,8 +1,7 @@
 import java.util.*;
 import menu.*;
 import restaurant.Food;
-import view.InputView;
-import view.OutputView;
+import role.*;
 
 public class Main {
   public static void main(String[] args) {
@@ -11,151 +10,118 @@ public class Main {
 
     OutputView outputView = new OutputView();
     InputView inputView = new InputView();
+    MenuRepository menuRepository = new MenuRepository();
+    Validator validator = new Validator();
+    OrderService orderService = new OrderService();
 
-
-    // 가게 메뉴판 등록 (List 활용(추후 더 이해하기))
-    List<Food> pastaMenu = new ArrayList<>();
-    pastaMenu.add(new TomatoPasta(0, 0));
-    pastaMenu.add(new CreamPasta(0, 0));
-    pastaMenu.add(new OilPasta(0, 0));
-
-    List<Food> steakMenu = new ArrayList<>();
-    steakMenu.add(new PorkSteak(0, 0));
-    steakMenu.add(new BeefSteak(0, 0));
-
-
-
-    //카테고리 메뉴
     int category = 0;
     List<Food> chosenList = null;
 
-    //예외수 일때 반복하기위해서 사용함
     //1. 카테고리 선택
     while (true) {
-      outputView.categoryMenu();
+      outputView.categoryMenu(); // 카테고리 메뉴 출력
 
-      category = inputView.readCategoryNumber();
-
-      if (category == 1) {
-        System.out.println("\n--- 파스타 메뉴 선택 ---");
-        chosenList = pastaMenu;
-        break;
-      } else if (category == 2) {
-        System.out.println("\n--- 스테이크 메뉴 선택 ---");
-        chosenList = steakMenu;
+      category = inputView.readCategoryNumber(); // 카테고리 번호 입력
+      // 입력 에러(-1)가 감지되면 루프 상단으로 복귀
+      if (category == -1) {
+        outputView.reInput(); // 다시입력 출력
+        continue;
+      }
+      // 입력값이 1, 2인지 판단을 Validator확인
+      if (validator.isValidCategory(category)) {
+        //해당하는 메뉴판 목록을 조회해옴
+        chosenList = menuRepository.getMenusByCategory(category);
         break;
       }
       outputView.reInput();
     }
 
-    //2. 카테고리에서 고른 옵션으로 넘어가 음식 종류 선택
+
+    //2. 카테로그-> 메뉴에서 음식 선택
     int menuChoice = 0;
     while (true) {
-      for (int i = 0; i < chosenList.size(); i++) {
-        System.out.println((i + 1) + ". " + chosenList.get(i).getFoodName() + " (" + chosenList.get(i).getPrice() + "원)");
-      }
-      System.out.print("메뉴 번호를 고르세요: ");
-
-
-      try {
-        menuChoice = sc.nextInt();
-      } catch (InputMismatchException e){ //숫자 이외의 값 잡기
-        sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-        menuChoice = -1;
+      // 카테고리 선택후 메뉴 출력
+      outputView.menuBoard(chosenList);
+      // 메뉴 음식 입력
+      menuChoice = inputView.readMenuChoice();
+      // 숫자가 아닌 입력 예외(-1) 검사
+      if (menuChoice == -1) {
+        outputView.reInput();
         continue;
       }
-
+      //숫자 범위 검사 (고른 숫자가 1이상, 메뉴크기 이하)
       if (menuChoice >= 1 && menuChoice <= chosenList.size()) {
         break;
       }
       outputView.reInput();
     }
 
-    Food baseFood = chosenList.get(menuChoice - 1);
+    Food baseFood = chosenList.get(menuChoice - 1); //메뉴고른거 넣기, 인덱스때문에 -1
     int option1 = 0;
     int option2 = 0;
 
-    //2-1. 파스타 옵션
+    //2-1. 파스타 옵션의 음식
     if (category == 1) {
       while (true) {
-        outputView.pastaOption1();
-
-        try {
-          option1 = sc.nextInt();
-        } catch (InputMismatchException e){
-          sc.nextLine();
-          option1 = -1;
+        int maxRange = outputView.pastaOption1();
+        option1 = inputView.readOptionNumber();
+        if (option1 == -1) { //오류값 -1 반환했을때 방어막1
+          outputView.reInput();
           continue;
         }
-        if (option1 >= 1 && option1 <= 3) break;
+        if (option1 >= 1 && option1 <= maxRange) break; //여기서도 -1 걸러지지만 범위내의 값인지 한번더 확인 방어막2
         outputView.reInput();
       }
-
       while (true) {
-        outputView.pastaOption2();
-
-        try {
-          option2 = sc.nextInt();
-        } catch (InputMismatchException e){ //숫자 이외의 값 잡기
-          sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-          option2 = -1;
+        int maxRange = outputView.pastaOption2();
+        option2 = inputView.readOptionNumber();
+        if (option2 == -1) {
+          outputView.reInput();
           continue;
         }
-
-        if (option2 >= 1 && option2 <= 3) break;
+        if (option2 >= 1 && option2 <= maxRange) break;
         outputView.reInput();
       }
 
-      //2-2. 스테이크 옵션
+      // 2-2. 스테이크 옵션 선택 영역
     } else if (category == 2) {
       while (true) {
-        outputView.steakOption1();
-
-        try {
-          option1 = sc.nextInt();
-        } catch (InputMismatchException e){ //숫자 이외의 값 잡기
-          sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-          option1 = -1;
+        int maxRange = outputView.steakOption1();
+        option1 = inputView.readOptionNumber();
+        if (option1 == -1) {
+          outputView.reInput();
           continue;
         }
-
-        if (option1 >= 1 && option1 <= 2) break;
+        if (option1 >= 1 && option1 <= maxRange) break;
         outputView.reInput();
       }
-
       while (true) {
-        outputView.steakOption2();
+        int maxRange = outputView.steakOption2();
+        option2 = inputView.readOptionNumber();
 
-        try {
-          option2 = sc.nextInt();
-        } catch (InputMismatchException e){ //숫자 이외의 값 잡기
-          sc.nextLine(); // 다시 입력하기 위해 버퍼 비워주기
-          option2 = -1;
+        if (option2 == -1) {
+          outputView.reInput();
           continue;
         }
-
-        if (option2 >= 1 && option2 <= 5) break;
+        if (option2 >= 1 && option2 <= maxRange) break;
         outputView.reInput();
       }
     }
 
-    // instanceof 연산자 객체의 클래스확인, 상속 클래스 확인 등등(활용하면서 간단하게 넘어갔지만 나중에 정확하게 알아보기)
+    //다양성으로 해결
     if (baseFood instanceof TomatoPasta) selectedFood = new TomatoPasta(option1, option2);
     else if (baseFood instanceof CreamPasta) selectedFood = new CreamPasta(option1, option2);
     else if (baseFood instanceof OilPasta) selectedFood = new OilPasta(option1, option2);
     else if (baseFood instanceof PorkSteak) selectedFood = new PorkSteak(option1, option2);
     else if (baseFood instanceof BeefSteak) selectedFood = new BeefSteak(option1, option2);
 
+
+
+
     // 3. 최종 주문 확인
     if (selectedFood != null) {
-      System.out.println("\n====================================");
-      System.out.println("[주문서 출력] 선택하신 메뉴 정보");
-      System.out.println("메뉴명: " + selectedFood.getFoodName());
-      System.out.println("금  액: " + selectedFood.getPrice() + "원");
-      selectedFood.cook();
-      System.out.println("====================================");
+      outputView.printReceipt(selectedFood); // 🔴 한 줄로 명확하게 제어
     }
-
     sc.close();
   }
 }
