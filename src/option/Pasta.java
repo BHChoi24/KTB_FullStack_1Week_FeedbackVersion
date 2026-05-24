@@ -2,7 +2,7 @@ package option;
 
 import restaurant.Food;
 
-public class Pasta extends Food {
+public abstract class Pasta extends Food {
 
     public static final String[] NOODLE_TYPES = {"스파게티 면", "링귀니 면", "부카티니 면"};
     public static final String[] NOODLE_DONENESS = {"단단하게 (알단테)", "보통 (단테)", "부드럽게 (벤코토)"};

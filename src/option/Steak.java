@@ -2,7 +2,7 @@ package option;
 
 import restaurant.Food;
 
-public class Steak extends Food {
+public abstract class Steak extends Food {
 
     public static final String[] STEAK_STYLES = {"챱스테이크", "통스테이크"};
     public static final String[] STEAK_DONENESS = {"레어", "미디움 레어", "미디움", "미디움 웰던", "웰던"};
