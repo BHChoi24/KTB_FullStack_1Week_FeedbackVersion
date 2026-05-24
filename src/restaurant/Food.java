@@ -1,6 +1,6 @@
 package restaurant;
 
-public class Food {
+public abstract class Food {
     private final String foodName;
     private final int price;
 
@@ -8,6 +8,8 @@ public class Food {
         this.foodName = foodName;
         this.price = price;
     }
+    public abstract Food createOrder(int option1, int option2);
+
     public void cook() {
         System.out.println("요리 접수");
     }
