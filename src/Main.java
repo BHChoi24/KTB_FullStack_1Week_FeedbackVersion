@@ -5,9 +5,9 @@ import role.*;
 
 public class Main {
   public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
     Food selectedFood = null;
 
+    //기존에 main이 했던 역할 나누기 위해
     OutputView outputView = new OutputView();
     InputView inputView = new InputView();
     MenuRepository menuRepository = new MenuRepository();
@@ -20,7 +20,6 @@ public class Main {
     //1. 카테고리 선택
     while (true) {
       outputView.categoryMenu(); // 카테고리 메뉴 출력
-
       category = inputView.readCategoryNumber(); // 카테고리 번호 입력
       // 입력 에러(-1)가 감지되면 루프 상단으로 복귀
       if (category == -1) {
@@ -60,16 +59,19 @@ public class Main {
     int option1 = 0;
     int option2 = 0;
 
-    //2-1. 파스타 옵션의 음식
+    //3. 옵션 부분
+    //3-1. 파스타 옵션의 음식
     if (category == 1) {
       while (true) {
-        int maxRange = outputView.pastaOption1();
+        int maxRange = outputView.pastaOption1();//파스파 옵션보여주고 맥스값 넣기
         option1 = inputView.readOptionNumber();
-        if (option1 == -1) { //오류값 -1 반환했을때 방어막1
+        if (option1 == -1) { //방어막1 오류값 -1 반환했을때
           outputView.reInput();
           continue;
         }
-        if (option1 >= 1 && option1 <= maxRange) break; //여기서도 -1 걸러지지만 범위내의 값인지 한번더 확인 방어막2
+        if (validator.isValidChoice(option1, maxRange)) {//방어막2 값이 범위안에 있는지
+          break;
+        }
         outputView.reInput();
       }
       while (true) {
@@ -79,11 +81,13 @@ public class Main {
           outputView.reInput();
           continue;
         }
-        if (option2 >= 1 && option2 <= maxRange) break;
+        if (validator.isValidChoice(option2, maxRange)) {
+          break;
+        }
         outputView.reInput();
       }
 
-      // 2-2. 스테이크 옵션 선택 영역
+      // 3-2. 스테이크 옵션 선택 영역
     } else if (category == 2) {
       while (true) {
         int maxRange = outputView.steakOption1();
@@ -92,7 +96,9 @@ public class Main {
           outputView.reInput();
           continue;
         }
-        if (option1 >= 1 && option1 <= maxRange) break;
+        if (validator.isValidChoice(option1, maxRange)) {
+          break;
+        }
         outputView.reInput();
       }
       while (true) {
@@ -103,25 +109,19 @@ public class Main {
           outputView.reInput();
           continue;
         }
-        if (option2 >= 1 && option2 <= maxRange) break;
+        if (validator.isValidChoice(option2, maxRange)) {
+          break;
+        }
         outputView.reInput();
       }
     }
 
     //다양성으로 해결
-    if (baseFood instanceof TomatoPasta) selectedFood = new TomatoPasta(option1, option2);
-    else if (baseFood instanceof CreamPasta) selectedFood = new CreamPasta(option1, option2);
-    else if (baseFood instanceof OilPasta) selectedFood = new OilPasta(option1, option2);
-    else if (baseFood instanceof PorkSteak) selectedFood = new PorkSteak(option1, option2);
-    else if (baseFood instanceof BeefSteak) selectedFood = new BeefSteak(option1, option2);
+    selectedFood = orderService.createSelectedFood(baseFood, option1, option2);
 
-
-
-
-    // 3. 최종 주문 확인
+    // 4. 최종 주문 확인
     if (selectedFood != null) {
-      outputView.printReceipt(selectedFood); // 🔴 한 줄로 명확하게 제어
+      outputView.printReceipt(selectedFood);
     }
-    sc.close();
   }
 }

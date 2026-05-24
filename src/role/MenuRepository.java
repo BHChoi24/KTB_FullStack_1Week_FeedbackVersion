@@ -12,13 +12,14 @@ public class MenuRepository {
 
     // 메뉴판
     public MenuRepository() {
+        //옵션값 0이였는데 뺌
         //파스타
-        pastaMenu.add(new TomatoPasta(0, 0));
-        pastaMenu.add(new CreamPasta(0, 0));
-        pastaMenu.add(new OilPasta(0, 0));
+        pastaMenu.add(new TomatoPasta());
+        pastaMenu.add(new CreamPasta());
+        pastaMenu.add(new OilPasta());
         //스테이크
-        steakMenu.add(new PorkSteak(0, 0));
-        steakMenu.add(new BeefSteak(0, 0));
+        steakMenu.add(new PorkSteak());
+        steakMenu.add(new BeefSteak());
     }
     //메뉴판 카테고리 1,2
     public List<Food> getMenusByCategory(int category) {

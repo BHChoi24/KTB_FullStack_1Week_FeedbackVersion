@@ -4,33 +4,33 @@ import restaurant.Food;
 
 public class Pasta extends Food {
 
+    public static final String[] NOODLE_TYPES = {"스파게티 면", "링귀니 면", "부카티니 면"};
+    public static final String[] NOODLE_DONENESS = {"단단하게 (알단테)", "보통 (단테)", "부드럽게 (벤코토)"};
+
     String noodleType;
     String noodleDoneness;
 
+    //메뉴판에 보이게
+    public Pasta(String foodName, int price) {
+        super(foodName, price);
+    }
+    //주문용
     public Pasta(String foodName, int price, int noodleTypeChoice, int noodleDonenessChoice) {
         super(foodName, price);
 
-        if(noodleTypeChoice == 1){
-            this.noodleType = "스파케티";
-        } else if (noodleTypeChoice == 2){
-            this.noodleType = "링귀니";
-        } else if (noodleTypeChoice == 3){
-            this. noodleType = "부카디니";
+        if (noodleTypeChoice >= 1 && noodleTypeChoice <= NOODLE_TYPES.length) {
+            this.noodleType = NOODLE_TYPES[noodleTypeChoice - 1];
         } else {
-            this.noodleType = "기본 면 스파케티";
-        }
-        //피드백에 있던 오타 수정
-        if (noodleDonenessChoice == 1){
-            this.noodleDoneness = "단단하게 (알단테)";
-        } else if (noodleDonenessChoice == 2){
-            this.noodleDoneness = "보통 (단테)";
-        } else if (noodleDonenessChoice == 3){
-            this.noodleDoneness = "부드렵게 (벤코토)";
-        } else {
-            this.noodleDoneness = "기본 익힘(보통)"; // 1,2,3 외의 값이 들어올 때를 대비한 else
+            this.noodleType = "기본 면 스파게티"; //나올일 없음
         }
 
+        if (noodleDonenessChoice >= 1 && noodleDonenessChoice <= NOODLE_DONENESS.length) {
+            this.noodleDoneness = NOODLE_DONENESS[noodleDonenessChoice - 1];
+        } else {
+            this.noodleDoneness = "기본 익힘(보통)"; //나올일 없음
+        }
     }
+
     @Override
     public void cook(){
         super.cook();

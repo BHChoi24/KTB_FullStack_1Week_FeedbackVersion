@@ -8,28 +8,9 @@ public class Validator {
         return category == 1 || category == 2;
     }
 
-    /**
-     * 선택한 메뉴 번호가 존재하는 범위 내의 숫자인지 검사
-     * @param choice 사용자가 입력한 번호
-     * @param maxRange 해당 메뉴판 리스트의 최대 크기(size)
-     */
-    //메뉴 선택
-    public boolean isValidMenuChoice(int choice, int maxRange) {
+    //1부터 맥스값까지 있는지 확인 (메뉴 선택, 파스타 옵션, 스테이크 옵션)
+    //매개변수 choice 사용자가 입력한 번호, maxRange 해당 메뉴판 리스트의 최대 크기(size)
+    public boolean isValidChoice(int choice, int maxRange) {
         return choice >= 1 && choice <= maxRange;
-    }
-
-    //파스타 하위 옵션 번호 검사 (1~3 범위 확인)
-    public boolean isValidPastaOption(int option) {
-        return option >= 1 && option <= 3;
-    }
-
-    //스테이크 스타일 옵션 번호 검사 (1~2 범위 확인)
-    public boolean isValidSteakStyleOption(int option) {
-        return option >= 1 && option <= 2;
-    }
-
-    //스테이크 굽기 옵션 번호 검사 (1~5 범위 확인)
-    public boolean isValidSteakDonenessOption(int option) {
-        return option >= 1 && option <= 5;
     }
 }
